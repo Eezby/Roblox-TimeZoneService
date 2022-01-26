@@ -3,6 +3,8 @@
     ...
     By: Eezby
 
+    PLACE IN ReplicatedStorage
+
     FUNCTIONS:
         TimeZoneService:GetServerInfo()
          Get details about the server's location and timezone data. See notes in the function for editing data received.

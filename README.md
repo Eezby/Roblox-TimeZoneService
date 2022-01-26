@@ -3,6 +3,7 @@ A way to get server or client timezones while also comparing their viability wit
 
 ## Requirements
 - Enable HTTPService in your game.
+- Place in ReplicatedStorage
 
 ## Disclaimer
 This was more of a fun side project that I wrote in about 2 hours. I have no clue what the API limitations are, and the function weightings are completely based on my opinion.
