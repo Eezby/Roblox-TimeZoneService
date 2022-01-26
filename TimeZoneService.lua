@@ -1,6 +1,6 @@
 --[[
     TimeZoneService: A way to get server or client timezones while also comparing their viability with each other.
-    ...
+    https://devforum.roblox.com/t/timezoneservice-get-and-compare-server-client-time-zones/1645084
     By: Eezby
 
     PLACE IN ReplicatedStorage
