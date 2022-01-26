@@ -316,7 +316,7 @@ function TimeZoneService:GetClientTimeZone(client)
 	end)
 	
 	if success and gtmOffsetInSeconds then
-		return self:GetByTimeZoneOffset(gtmOffsetInSeconds, true)
+		return self:GetTimeZoneByOffset(gtmOffsetInSeconds, true)
 	end
 end
 
