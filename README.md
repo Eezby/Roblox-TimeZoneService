@@ -31,6 +31,4 @@ This was more of a fun side project that I wrote in about 2 hours. I have no clu
         and "group".
 
 ## NOTES
-    I assigned groups to each timezone as a timezone alone is not a viable way to determine whether a player's ping will be good or not in that region.
-    For example, EST and PRT are only one hour apart, yet for most on the EST zone CTL, MNT, and even PST are better options. Feel free to change the
-    weight or groups as you see fit.
+I assigned groups to each timezone as a timezone alone is not a viable way to determine whether a player's ping will be good or not in that region. For example, EST and PRT are only one hour apart, yet for most on the EST zone CTL, MNT, and even PST are better options. Feel free to change the weight or groups as you see fit.
