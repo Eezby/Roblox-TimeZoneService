@@ -13,14 +13,17 @@
         TimeZoneService:GetTimeZoneInfo(zone: string)
          Pass in a valid timezone from the TimeZone table below (ex. EST, PST, GMT) and receive information about it's full name and offset.
 
-        TimeZoneService:GetTimeZoneStatus(zone1: string, zone2: string)
-         Pass in two valid timezones from the TimeZone table below and receive information about how viable their are together. 
-         For example EST -> EST is "Amazing", while EST -> GMT is "Bad". This can be used for telling players how their ping might fair in a
-         certain server region.
-
         TimeZoneService:GetTimeZoneByOffset(offset: number, inSeconds: boolean)
          Pass in an offset and get back the corresponding timezone. You can specify whether the offset is in seconds or hours using the optional
          "inSeconds" boolean value.
+
+        TimeZoneService:GetTimeZoneByContinent(continent: string)
+         Pass in a valid continent code (NA, SA, AS, AF, EU, AU) and receive a list of timezones within that continent.
+
+        TimeZoneService:GetTimeZoneStatus(zone1: string, zone2: string)
+         Pass in two valid timezones from the TimeZone table below and receive information about how viable their are together. 
+         For example EST -> EST is "Amazing", while EST -> GMT is "Terrible". This can be used for telling players how their ping might fair in a
+         certain server region.
 
         TimeZoneService:SortBestTimeZones(zone: string)
          Pass in a valid timezone from the TimeZone table below and receive an ordered list of every timezone from best to worse in terms of distance
@@ -246,6 +249,7 @@ if not IsServer then
 	
 	Connection.OnClientInvoke = function(action)
 		if action == "get-zone" then
+            -- Server time is in UTC (GMT), so this should get the offset between GMT and the client's time rounded to the nearest 100th
 			return math.floor((tick() - workspace:GetServerTimeNow()) / 100 + 0.5) * 100
 		end
 	end
@@ -269,6 +273,7 @@ function TimeZoneService:GetServerInfo()
 	if success and ipResult.ip then
 		local locationResult
 		local success, message = pcall(function()
+            -- GOTO: https://ip-api.com/docs/api:json if you would like to change the fields received from the API
 			locationResult = HttpService:JSONDecode(HttpService:GetAsync("http://ip-api.com/json/"..ipResult.ip.."?fields=37273887"))
 		end)
 
@@ -318,27 +323,6 @@ function TimeZoneService:GetTimeZoneInfo(zone)
 	return TimeZones[zone]
 end
 
-function TimeZoneService:GetTimeZoneStatus(zone1, zone2)
-	local zone1Info = self:GetTimeZoneInfo(zone1)
-	local zone2Info = self:GetTimeZoneInfo(zone2)
-	
-	local difference = math.abs(zone1Info.gmtOffset - zone2Info.gmtOffset)
-	
-	if zone1Info.group ~= zone2Info.group then
-		difference += GROUP_WEIGHT
-	end
-	
-	if difference <= 2 then
-		return "Amazing"
-	elseif difference <= 4 then
-		return "Good"
-	elseif difference <= 6 then
-		return "Bad"
-	elseif difference > 6 then
-		return "Terrible"
-	end
-end
-
 function TimeZoneService:GetTimeZoneByOffset(offset, inSeconds)
 	if inSeconds then
 		offset = offset / 60^2
@@ -371,6 +355,27 @@ function TimeZoneService:GetTimeZoneByContinent(continent)
     end
 
     return timezoneList
+end
+
+function TimeZoneService:GetTimeZoneStatus(zone1, zone2)
+	local zone1Info = self:GetTimeZoneInfo(zone1)
+	local zone2Info = self:GetTimeZoneInfo(zone2)
+	
+	local difference = math.abs(zone1Info.gmtOffset - zone2Info.gmtOffset)
+	
+	if zone1Info.group ~= zone2Info.group then
+		difference += GROUP_WEIGHT
+	end
+	
+	if difference <= 2 then
+		return "Amazing"
+	elseif difference <= 4 then
+		return "Good"
+	elseif difference <= 6 then
+		return "Bad"
+	elseif difference > 6 then
+		return "Terrible"
+	end
 end
 
 function TimeZoneService:SortBestTimeZones(zone)
